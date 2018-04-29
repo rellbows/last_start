@@ -1,5 +1,5 @@
 # Program Name: 'Last-to-Start' Activity Selector
-# Filename: last_start.def foo():
+# Filename: last_start.py
 # Author: Ryan Ellis
 # Due Date: 4/29/18
 
