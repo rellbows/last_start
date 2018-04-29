@@ -115,12 +115,6 @@ def main():
 
 	act_lists = build_lists(string_list)
 
-	#print act_lists[0]
-
-	#act_lists[0].sort(key = lambda activity: activity[1], reverse = True)
-
-	#print act_lists[0]
-
 	for act_list in act_lists:
 		act_list.sort(key = lambda activity: activity[1], reverse = True)
 		act_results.append(last_start(act_list))
