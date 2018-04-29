@@ -26,7 +26,10 @@ def print_act_results(act_lists):
 		print('*' * 40)
 		print('Set %d' % (i + 1))
 		print('Number of activities selected = %d' % len(act_list))
-		print('Activities: ' + ''.join(str(act_list)))
+		# reverse the act list so activities are shown in the correct
+		# order
+		act_list.reverse()
+		print('Activities: ' + ' '.join(str(x) for x in act_list))
 		print('*' * 40)
 
 # list preparation
@@ -78,6 +81,58 @@ def build_lists(string_list):
 
 	return act_lists
 
+def merge(sub_list, left, middle, right):
+
+    # get the lengths of each half
+    left_length = middle - left + 1
+    right_length = right - middle
+
+    # make left and right lists to hold the halves
+    left_list = [0] * (left_length + 1)
+    right_list = [0] * (right_length + 1)
+
+    # load the values from master list into those lists
+    for i in range(0, left_length):
+        left_list[i] = sub_list[left + i]
+
+    for j in range(0, right_length):
+        right_list[j] = sub_list[middle + j + 1]
+
+    i = 0
+    j = 0
+    k = left
+
+    while i < left_length and j < right_length:
+        if left_list[i][1] >= right_list[j][1]:
+            sub_list[k] = left_list[i]
+            i = i + 1
+        else:
+            sub_list[k] = right_list[j]
+            j = j + 1
+        k = k + 1
+
+    # loads all the remaining items still in the left/righ lists back into
+    # the main list.
+    while i < left_length:
+        sub_list[k] = left_list[i]
+        i = i + 1
+        k = k + 1
+
+    while j < right_length:
+        sub_list[k] = right_list[j]
+        j = j + 1
+        k = k + 1
+
+def merge_sort(a_num_list, left, right):
+
+    if left < right:
+        middle = ((left + right) / 2)
+        merge_sort(a_num_list, left, middle)
+        merge_sort(a_num_list, (middle + 1), right)
+        merge(a_num_list, left, middle, right)
+
+    return a_num_list
+
 # algorithm
 
 def last_start(act_list):
@@ -116,8 +171,9 @@ def main():
 	act_lists = build_lists(string_list)
 
 	for act_list in act_lists:
-		act_list.sort(key = lambda activity: activity[1], reverse = True)
-		act_results.append(last_start(act_list))
+		list_length = len(act_list) - 1
+		sorted_act_list = merge_sort(act_list, 0, list_length)
+		act_results.append(last_start(sorted_act_list))
 
 	print_act_results(act_results)
 
